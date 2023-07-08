@@ -198,7 +198,7 @@ app.post("/like", validate, async (req, res) => {
 async function validate (req, res, next){
     const sessionId = req.headers.cookie?.split('=')[1];
 
-    let user = await db.collection("users").find({sessionId: { $in: [sessionId]}}).fetch();
+    let user = await db.collection("users").find({sessionId: { $in: [sessionId]}}).toArray();
 
     if(user.length !== 0){
         req.username = user[0].username;
