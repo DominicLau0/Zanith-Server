@@ -40,7 +40,7 @@ mongoose.connect(`mongodb+srv://zanithmanagement:${process.env.MONGOOSE_SECRET}@
 let db = mongoose.connection;
 
 //Renders the home page.
-app.get("/", validate, (req, res) => {
+app.get("/", (req, res) => {
     res.send("API is working properly");
 });
 
