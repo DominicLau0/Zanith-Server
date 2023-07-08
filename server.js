@@ -103,8 +103,9 @@ app.post("/signup", async (req, res) => {
 
         await users.create({username: req.body.username, password: hashedPassword, email: req.body.email, admin: false, moderator: false, recordLabel: false, sessionId: sessionId});
         res.cookie('sessionId', sessionId, {
-            httpOnly: false,
-            sameSite: 'none'
+            httpOnly: true,
+            sameSite: 'none',
+            secure: true
         })
 
         res.sendStatus(201).end();
@@ -126,8 +127,9 @@ app.post("/login", async (req, res) => {
             await db.collection("users").updateOne({username: req.body.username}, {$push: {sessionId: sessionId}});
 
             res.cookie('sessionId', sessionId, {
-                httpOnly: false,
-                sameSite: 'none'
+                httpOnly: true,
+                sameSite: 'none',
+                secure: true
             })
             
             res.sendStatus(201).end();
