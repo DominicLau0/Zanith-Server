@@ -102,7 +102,10 @@ app.post("/signup", async (req, res) => {
         let sessionId = crypto.randomUUID();
 
         await users.create({username: req.body.username, password: hashedPassword, email: req.body.email, admin: false, moderator: false, recordLabel: false, sessionId: sessionId});
-        res.set('Set-Cookie', `sessionId=${sessionId}`);
+        res.cookie('sessionId', sessionId, {
+            httpOnly: false,
+            sameSite: 'none'
+        })
 
         res.sendStatus(201).end();
     }
@@ -123,7 +126,8 @@ app.post("/login", async (req, res) => {
             await db.collection("users").updateOne({username: req.body.username}, {$push: {sessionId: sessionId}});
 
             res.cookie('sessionId', sessionId, {
-                httpOnly: false
+                httpOnly: false,
+                sameSite: 'none'
             })
             
             res.sendStatus(201).end();
