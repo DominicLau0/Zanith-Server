@@ -34,8 +34,18 @@ const likes = require("./mongoose-schema/like");
 const comments = require("./mongoose-schema/comment");
 const recordLabels = require("./mongoose-schema/record-label");
 
+const PORT = 5000;
+
 mongoose.set(`strictQuery`, false);
-mongoose.connect(`mongodb+srv://zanithmanagement:${process.env.MONGOOSE_SECRET}@zanith.cumewc0.mongodb.net/?retryWrites=true&w=majority`, {useNewUrlParser: true});
+
+const connectDB = async () => {
+    try{
+        const conn = await mongoose.connect(`mongodb+srv://zanithmanagement:${process.env.MONGOOSE_SECRET}@zanith.cumewc0.mongodb.net/?retryWrites=true&w=majority`, {useNewUrlParser: true});
+    } catch (error) {
+        console.log(error);
+        process.exit(1);
+    }
+}
 
 let db = mongoose.connection;
 
@@ -199,4 +209,8 @@ async function validate (req, res, next){
     next();
 }
 
-app.listen(5000);
+connectDB().then(() => {
+    app.listen(PORT, () => {
+        console.log("listening for requests");
+    })
+})
