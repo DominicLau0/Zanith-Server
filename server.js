@@ -141,7 +141,7 @@ app.post("/login", async (req, res) => {
     }
 });
 
-app.post("/logout", async (req, res) =>{
+app.post("/logout", validate, async (req, res) =>{
     await db.collection("users").updateOne({username: req.username}, {$pull: {sessionId: req.sessionId}});
     res.set('Set-Cookie', 'sessionId=; expires=Thu, 01 Jan 1970 00:00:00 GMT');
 
