@@ -24,7 +24,7 @@ app.use(express.static('css'));
 app.set("view engine", "pug");
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors({origin: ['http://localhost:3000', "https://zanith-server.onrender.com/"], credentials: true}));
+app.use(cors({origin: ['http://localhost:3000', "https://zanith-server.onrender.com"], credentials: true}));
 
 //Mongoose application
 const mongoose = require("mongoose");
