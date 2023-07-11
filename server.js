@@ -105,7 +105,8 @@ app.post("/signup", async (req, res) => {
         res.cookie('sessionId', sessionId, {
             httpOnly: true,
             sameSite: 'none',
-            secure: true
+            secure: true,
+            maxAge: 1000*60*60*24*365
         })
 
         res.sendStatus(201).end();
@@ -129,7 +130,8 @@ app.post("/login", async (req, res) => {
             res.cookie('sessionId', sessionId, {
                 httpOnly: true,
                 sameSite: 'none',
-                secure: true
+                secure: true,
+                maxAge: 1000*60*60*24*365
             })
             
             res.sendStatus(201).end();
