@@ -30,8 +30,6 @@ app.use(cors({origin: ['http://localhost:3000', "https://zanith-server.onrender.
 const mongoose = require("mongoose");
 const users = require("./mongoose-schema/user");
 const songs = require("./mongoose-schema/song");
-const likes = require("./mongoose-schema/like");
-const comments = require("./mongoose-schema/comment");
 const recordLabels = require("./mongoose-schema/record-label");
 
 const PORT = 5000;
@@ -61,9 +59,8 @@ app.get("/root", validate, async (req, res) => {
 //Renders the home page.
 app.get("/home", validate, async (req, res) => {
     let songs = await db.collection("songs").find({username: "MrObvious"}).toArray();
-    let like = await db.collection("likes").find({username: req.username}).toArray();
 
-    res.send({songs, like});
+    res.send({songs});
 });
 
 //Renders the profile page.
@@ -71,9 +68,8 @@ app.get("/profile/:artistName", validate, async (req, res) => {
     let artistName = req.params.artistName.toString();
     
     let songs = await db.collection("songs").find({username: artistName}).toArray();
-    let like = await db.collection("likes").find({username: req.username}).toArray();
 
-    res.send({songs, like});
+    res.send({songs});
 });
 
 
@@ -82,12 +78,19 @@ app.get("/search/:result/", validate, async (req, res) => {
 
 	let songsResult = await db.collection("songs").find({$or: [{title: result}, {username: result}]}).toArray();
     let artistResult = await db.collection("users").find({username: result}).toArray();
-    let like = await db.collection("likes").find({username: req.username}).toArray();
     let artistName = "";
 
     if(artistResult.length !== 0){
         artistName = artistResult[0].username;
     }
+
+	res.send({songs: songsResult, artist: artistName});
+});
+
+app.get("/song/:songName/", validate, async (req, res) => {
+	let result = req.params.result;
+
+	
 
 	res.send({songs: songsResult, artist: artistName, like: like});
 });
@@ -187,18 +190,18 @@ app.post("/listen", validate, async (req, res) => {
 })
 
 app.post("/like", validate, async (req, res) => {
-    let like = await db.collection("likes").find({$and: [{username: req.username}, {song: req.body.song}]}).toArray();
     let song = await db.collection("songs").find({song: req.body.song}).toArray();
 
-    if(like.length === 1){
-        await likes.deleteOne({username: req.username, song: req.body.song});
-        await db.collection("songs").updateOne({song: req.body.song}, {$inc: {likes: -1}});
-        res.status(200).send({like: song[0].likes-1, newLike: false});
+    if(song.length !== 0){
+        if(song.likes.includes(req.username)){
+            await db.collection("songs").updateOne({song: req.body.song}, {$pull: {likes: req.username}});
+            res.status(200).send({like: song.likes.length-1, newLike: false});
+        }else{
+            await db.collection("songs").updateOne({song: req.body.song}, {$push: {likes: req.username}});
+            res.status(200).send({like: song.likes.length+1, newLike: false});
+        }
     }else{
-        await likes.create({username: req.username, song: req.body.song});
-
-        await db.collection("songs").updateOne({song: req.body.song}, {$inc: {likes: 1}});
-        res.status(200).send({like: song[0].likes+1, newLike: true});
+        res.status(401).end();
     }
 })
 
