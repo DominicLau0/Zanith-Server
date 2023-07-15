@@ -192,6 +192,8 @@ app.post("/listen", validate, async (req, res) => {
 app.post("/like", validate, async (req, res) => {
     let song = await db.collection("songs").find({song: req.body.song}).toArray();
 
+    console.log(song);
+
     if(song.length !== 0){
         if(song.likes.includes(req.username)){
             await db.collection("songs").updateOne({song: req.body.song}, {$pull: {likes: req.username}});
