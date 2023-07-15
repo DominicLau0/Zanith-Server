@@ -198,7 +198,7 @@ app.post("/like", validate, async (req, res) => {
             res.status(200).send({like: song[0].likes.length-1, newLike: false});
         }else{
             await db.collection("songs").updateOne({song: req.body.song}, {$push: {likes: req.username}});
-            res.status(200).send({like: song[0].likes.length+1, newLike: false});
+            res.status(200).send({like: song[0].likes.length+1, newLike: true});
         }
     }else{
         res.status(401).end();
