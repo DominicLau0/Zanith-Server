@@ -87,12 +87,16 @@ app.get("/search/:result/", validate, async (req, res) => {
 	res.send({songs: songsResult, artist: artistName});
 });
 
-app.get("/song/:songName/", validate, async (req, res) => {
-	let result = req.params.result;
+app.get("/song/:songName", validate, async (req, res) => {
+    let songName = req.params.songName;
 
-	
+    let song = await db.collection("songs").find({song: songName}).toArray();
 
-	res.send({songs: songsResult, artist: artistName, like: like});
+    if(song.length !== 0){
+        res.send({song});
+    }else{
+        res.status(401).end();
+    }
 });
 
 //POST request for signup
