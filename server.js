@@ -192,15 +192,13 @@ app.post("/listen", validate, async (req, res) => {
 app.post("/like", validate, async (req, res) => {
     let song = await db.collection("songs").find({song: req.body.song}).toArray();
 
-    console.log(song);
-
     if(song.length !== 0){
-        if(song.likes.includes(req.username)){
+        if(song[0].likes.includes(req.username)){
             await db.collection("songs").updateOne({song: req.body.song}, {$pull: {likes: req.username}});
-            res.status(200).send({like: song.likes.length-1, newLike: false});
+            res.status(200).send({like: song[0].likes.length-1, newLike: false});
         }else{
             await db.collection("songs").updateOne({song: req.body.song}, {$push: {likes: req.username}});
-            res.status(200).send({like: song.likes.length+1, newLike: false});
+            res.status(200).send({like: song[0].likes.length+1, newLike: false});
         }
     }else{
         res.status(401).end();
