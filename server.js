@@ -113,6 +113,7 @@ app.post("/signup", async (req, res) => {
             httpOnly: true,
             sameSite: 'none',
             secure: true,
+            path: '/',
             maxAge: 1000*60*60*24*365
         })
 
@@ -138,6 +139,7 @@ app.post("/login", async (req, res) => {
                 httpOnly: true,
                 sameSite: 'none',
                 secure: true,
+                path: '/',
                 maxAge: 1000*60*60*24*365
             })
             
