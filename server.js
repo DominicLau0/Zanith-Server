@@ -24,7 +24,7 @@ app.use(express.static('css'));
 app.set("view engine", "pug");
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors({origin: ['http://localhost:3000', "https://zanith-server.onrender.com"], credentials: true}));
+app.use(cors({origin: ['http://localhost:3000', "https://zanith-server.onrender.com", "https://zanith.me"], credentials: true}));
 
 //Mongoose application
 const mongoose = require("mongoose");
@@ -113,7 +113,6 @@ app.post("/signup", async (req, res) => {
             httpOnly: true,
             sameSite: 'none',
             secure: true,
-            path: '/',
             maxAge: 1000*60*60*24*365
         })
 
@@ -139,7 +138,6 @@ app.post("/login", async (req, res) => {
                 httpOnly: true,
                 sameSite: 'none',
                 secure: true,
-                path: '/',
                 maxAge: 1000*60*60*24*365
             })
             
