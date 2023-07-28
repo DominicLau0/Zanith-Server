@@ -209,6 +209,21 @@ app.post("/like", validate, async (req, res) => {
     }
 })
 
+app.post("/comment", validate, async (req, res) => {
+    if(req.body.comment === ""){
+        res.status(401).end();
+    }
+
+    let song = await db.collection("songs").find({song: req.body.song}).toArray();
+
+    if(song.length !== 0){
+        await db.collection("songs").updateOne({song: req.body.song}, {$push: {comments: {[req.body.username]: req.body.comment}}});
+        res.status(200).send({username: req.body.username});
+    }else{
+        res.status(401).end();
+    }
+})
+
 //Validate sessionId everytime the user makes a request
 async function validate (req, res, next){
     const sessionId = req.headers.cookie?.split('=')[1];
