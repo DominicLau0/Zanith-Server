@@ -93,7 +93,7 @@ app.get("/song/:songName", validate, async (req, res) => {
     let song = await db.collection("songs").find({song: songName}).toArray();
 
     if(song.length !== 0){
-        res.send({song});
+        res.send({song: song, username: req.username});
     }else{
         res.status(401).end();
     }
@@ -218,7 +218,18 @@ app.post("/comment", validate, async (req, res) => {
 
     if(song.length !== 0){
         await db.collection("songs").updateOne({song: req.body.song}, {$push: {comments: {[req.username]: req.body.comment}}});
-        res.status(200).send({username: req.username});
+        res.status(200).end();
+    }else{
+        res.status(401).end();
+    }
+})
+
+app.post("/deleteComment", validate, async (req, res) => {
+    let song = await db.collection("songs").find({song: req.body.song}).toArray();
+
+    if(song.length !== 0){
+        await db.collection("songs").updateOne({song: req.body.song}, {$pull: {comments: {[req.username]: req.body.comment}}});
+        res.status(200).end();
     }else{
         res.status(401).end();
     }
