@@ -9,7 +9,7 @@ const userSchema = new mongoose.Schema({
     song: String,
     picture: String,
     listens: Number,
-    likes: [String],
+    likes: [String, String, Date],
     comments: Number
 });
 
