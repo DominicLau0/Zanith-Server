@@ -217,7 +217,7 @@ app.post("/comment", validate, async (req, res) => {
     let song = await db.collection("songs").find({song: req.body.song}).toArray();
 
     if(song.length !== 0){
-        await db.collection("songs").updateOne({song: req.body.song}, {$push: {comments: {[req.username]: req.body.comment}}});
+        await db.collection("songs").updateOne({song: req.body.song}, {$push: {comments: {[req.username]: req.body.comment, "id": crypto.randomUUID(), "date": date()}}});
         res.status(200).end();
     }else{
         res.status(401).end();
