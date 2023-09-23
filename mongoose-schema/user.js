@@ -26,8 +26,8 @@ const userSchema = new mongoose.Schema({
         default: false
     },
     sessionId: [String],
-    lastPlayedSong: String,
-    profilePic: String
+    profilePic: String,
+    dateCreated: Date
 });
 
 module.exports = mongoose.model("user", userSchema);

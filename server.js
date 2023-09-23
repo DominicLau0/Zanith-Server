@@ -108,7 +108,7 @@ app.post("/signup", async (req, res) => {
         let hashedPassword = await bcrypt.hash(req.body.password, 10);
         let sessionId = crypto.randomUUID();
 
-        await users.create({username: req.body.username, password: hashedPassword, email: req.body.email, admin: false, moderator: false, recordLabel: false, sessionId: sessionId});
+        await users.create({username: req.body.username, password: hashedPassword, email: req.body.email, admin: false, moderator: false, recordLabel: false, sessionId: sessionId, dateCreated: new Date()});
         res.cookie('sessionId', sessionId, {
             httpOnly: true,
             sameSite: 'none',
