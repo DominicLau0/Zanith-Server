@@ -9,8 +9,8 @@ const userSchema = new mongoose.Schema({
     song: String,
     picture: String,
     listens: Number,
-    likes: [String, String, Date],
-    comments: Number
+    likes: [String],
+    comments: [Object]
 });
 
 module.exports = mongoose.model("song", userSchema);
