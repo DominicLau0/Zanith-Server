@@ -178,7 +178,7 @@ app.post("/upload", validate, async (req, res) => {
 
     //Compare with given signature
     if(song_expectedSignature === req.body.song_signature && image_expectedSignature === req.body.image_signature){
-        await songs.create({username: req.body.username, title: req.body.title, description: req.body.description, genre: req.body.genre, date: req.body.date, listens: 0, likes: 0, comments: 0, song: req.body.song_public_id, picture: req.body.image_public_id});
+        await songs.create({username: req.body.username, title: req.body.title, description: req.body.description, genre: req.body.genre, date: req.body.date, listens: 0, song: req.body.song_public_id, picture: req.body.image_public_id});
     }
 
     res.end();
