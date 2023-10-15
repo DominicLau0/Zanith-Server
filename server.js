@@ -76,7 +76,7 @@ app.get("/profile/:artistName", validate, async (req, res) => {
 app.get("/search/:result/", validate, async (req, res) => {
 	let result = req.params.result;
 
-	let songsResult = await db.collection("songs").find({$or: [{title: result}, {username: result}]}).toArray();
+	let songsResult = await db.collection("songs").find({$or: [{title: {$regex: result}}, {username: {$regex: result}}]}).toArray();
     let artistResult = await db.collection("users").find({username: result}).toArray();
     let artistName = "";
 
